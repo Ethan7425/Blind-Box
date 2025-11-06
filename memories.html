@@ -4,8 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>イーサンのBlind Box — Memories</title>
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,48 +24,12 @@
 
   <main class="container">
     <h2 class="section-title">Our little library</h2>
-    <div class="grid">
-
-      <!-- memory from first blind box -->
-        <!-- <article class="memory card glass neon-soft fade-in" data-date="2025-11-06">
-          <h3>Hi, you 🫶</h3>
-          <p>you found this little box — it’s a tiny space just for you.<br>
-          sometimes it’ll hold pictures, sometimes words, sometimes little secrets.<br>
-          today, it just wants to say…<br>
-          i’m really glad you’re here.</p>
-          <figure class="polaroid">
-            <img src="assets/other/cosmos.png" alt="a little bouquet for you" loading="lazy">
-            <figcaption>a little bouquet for you</figcaption>
-          </figure>
-          <p class="muted">Saved from your very first opening 🌸</p>
-        </article> -->
-
-        
-      
-      <!-- example memory -->
-      <!-- <article class="memory card glass neon-soft fade-in" data-date="2025-11-06">
-        <h3>Hi, you 🫶</h3>
-        <figure class="polaroid">
-          <img src="assets/demo-flower.jpg" alt="A tiny flower" loading="lazy">
-          <figcaption>a little pastel flower</figcaption>
-        </figure>
-        <p class="muted">Saved from our first demo.</p>
-      </article>
-
-      <article class="memory card glass neon-soft fade-in" data-date="2025-11-06">
-        <h3>Hi, you 🫶</h3>
-        <figure class="polaroid">
-          <img src="assets/demo-flower.jpg" alt="A tiny flower" loading="lazy">
-          <figcaption>a little pastel flower</figcaption>
-        </figure>
-        <p class="muted">Saved from our first demo.</p>
-      </article> -->
-
-    </div>
+    <div class="grid" id="memories-grid"><!-- JS fills this --></div>
   </main>
 
   <footer class="site-footer"><small>kept softly behind our tiny gate ♡</small></footer>
 
+  <script src="presents.js"></script>
   <script src="script.js"></script>
   <script>authGuard(); bindLogout();</script>
 </body>

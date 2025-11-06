@@ -4,9 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>イーサンのBlind Box — Today</title>
-  <link rel="icon" type="image/png" href="favicon.png" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -18,7 +19,6 @@
       <a href="home.html" class="active">Today</a>
       <span>·</span>
       <a href="memories.html">Memories</a>
-      <!-- <span class="right"><button id="logout" class="link">log out</button></span> -->
     </nav>
   </header>
 
@@ -33,7 +33,6 @@
           tabindex="0"
           aria-label="Blind box"
           style="
-            /* Optional per-face images (replace/remove as you like) */
             --img-front: url('assets/dice/front.png');
             --img-back: url('assets/dice/back.png');
             --img-left: url('assets/dice/left.png');
@@ -53,19 +52,10 @@
       <p class="tiny-hint" id="tiny">tap the box ✨</p>
     </section>
 
-    <!-- Present (hidden until CTA click) -->
+    <!-- Present is rendered here by JS after CTA -->
     <section id="today-reveal" class="reveal-zone" hidden>
-      <div id="today-content" class="card glass neon-soft">
-
-        <h2 class="section-title">Hi, you 🫶</h2>
-        <p> you found this little box — it’s a tiny space just for you.
-            sometimes it’ll hold pictures, sometimes words, sometimes little secrets.
-            today, it just wants to say…
-            i’m really glad you’re here.</p>
-        <figure class="polaroid">
-          <img src="assets/other/cosmos.png" alt="A tiny flower" loading="lazy">
-          <figcaption>a little bouquet for you</figcaption>
-        </figure>
+      <div id="today-content" class="card glass neon-soft" data-present-id="">
+        <!-- JS fills this with CURRENT present -->
       </div>
     </section>
   </main>
@@ -79,8 +69,8 @@
     </div>
   </div>
 
-  <!-- <footer class="site-footer"><small>pink pastels + glassy neon background ✨</small></footer> -->
-
+  <!-- order matters: load data first, then logic -->
+  <script src="presents.js"></script>
   <script src="script.js"></script>
   <script>authGuard(); bindLogout();</script>
 </body>
