@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>イーサンのBlind Box — Enter</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="gate-body">
+  <div class="bg-anim" aria-hidden="true"></div>
+
+  <main class="gate fade-in">
+    <h1 class="logo text-soft">イーサンのBlind Box</h1>
+    <form id="loginForm" class="card glass">
+      <label for="pw" class="label">Password</label>
+      <input id="pw" class="input" autocomplete="current-password" required />
+      <label class="remember">
+        <input id="remember" type="checkbox" checked />
+        <span>Remember me on this device</span>
+      </label>
+      <button class="btn glow-btn" type="submit">Enter</button>
+    </form>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    if (localStorage.getItem('met2_auth') === 'true' || sessionStorage.getItem('met2_auth') === 'true') {
+      location.href = 'home.html';
+    }
+  </script>
+</body>
+</html>

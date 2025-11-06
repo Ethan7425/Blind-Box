@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>イーサンのBlind Box — Today</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-anim" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <h1 class="logo text-soft">イーサンのBlind Box</h1>
+    <nav>
+      <a href="home.html" class="active">Today</a>
+      <span>·</span>
+      <a href="memories.html">Memories</a>
+      <!-- <span class="right"><button id="logout" class="link">log out</button></span> -->
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Centered scene with the blind box -->
+    <section class="scene-wrap">
+      <div class="scene">
+        <div
+          class="box-card"
+          id="blindBox3D"
+          role="button"
+          tabindex="0"
+          aria-label="Blind box"
+          style="
+            /* Optional per-face images (replace/remove as you like) */
+            --img-front: url('assets/dice/front.png');
+            --img-back: url('assets/dice/back.png');
+            --img-left: url('assets/dice/left.png');
+            --img-right: url('assets/dice/right.png');
+            --img-bottom: url('assets/dice/bottom.png');
+            --img-top: url('assets/dice/top.png');
+          "
+        >
+          <div class="face front"></div>
+          <div class="face back"></div>
+          <div class="face right"></div>
+          <div class="face left"></div>
+          <div class="face bottom"></div>
+          <div class="face top"></div>
+        </div>
+      </div>
+      <p class="tiny-hint" id="tiny">tap the box ✨</p>
+    </section>
+
+    <!-- Present (hidden until CTA click) -->
+    <section id="today-reveal" class="reveal-zone" hidden>
+      <div id="today-content" class="card glass neon-soft">
+        <!-- ✂️ Replace the demo with your daily surprise -->
+        <h2 class="section-title">Hi, you 🫶</h2>
+        <p> you found this little box — it’s a tiny space just for you.
+            sometimes it’ll hold pictures, sometimes words, sometimes little secrets.
+            today, it just wants to say…
+            i’m really glad you’re here.</p>
+        <figure class="polaroid">
+          <img src="assets/other/cosmos.png" alt="A tiny flower" loading="lazy">
+          <figcaption>a little bouquet for you</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <!-- Popup after spin finishes -->
+  <div id="present-popup" class="popup-backdrop" hidden>
+    <div class="popup-card glass neon-soft popup-in" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <h3 id="popupTitle" class="popup-title">yay! 🎁</h3>
+      <p class="popup-text">tap below to get your present</p>
+      <button id="ctaPresent" class="btn cta-glow">open the present</button>
+    </div>
+  </div>
+
+  <!-- <footer class="site-footer"><small>pink pastels + glassy neon background ✨</small></footer> -->
+
+  <script src="script.js"></script>
+  <script>authGuard(); bindLogout();</script>
+</body>
+</html>
