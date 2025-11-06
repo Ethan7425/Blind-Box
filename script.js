@@ -3,6 +3,14 @@ const PASSWORD = "チェン";
 const STORAGE_KEY = "met2_auth";
 /* -------------------------------------------------- */
 
+// ★ ADD: your Discord webhook (direct) or relay URL
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1435995830069760110/XqPp37xJIgXpZptmXyaj_Smye0CWNP7p8QaCfEHuBAio_vmEMKlYN53pOpl0VwF7fD8B"; // <-- paste yours
+// (Optional) give each present an id (use data-present-id on #today-content if you like)
+const PRESENT_ID = (() => {
+  const el = document.querySelector('#today-content');
+  return (el && el.dataset && el.dataset.presentId) || new Date().toISOString().slice(0,10);
+})();
+
 // Login workflow (index.html)
 const form = document.getElementById('loginForm');
 if (form) {
@@ -109,15 +117,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // CTA reveals present
   cta.addEventListener('click', () => {
+    // ★ ADD: notify Discord here (direct webhook)
+    fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: `🎁 **Blind Box opened!**\n• presentId: \`${PRESENT_ID}\`\n• time: \`${new Date().toLocaleString()}\``
+      })
+    }).catch(() => {}); // ignore errors in UI
+
+    // existing UI behavior
     popup.hidden = true;
     revealZone.hidden = false;
-    tiny.hidden = true;
+    if (tiny) tiny.hidden = true;
     revealZone.classList.remove('fade-in-present');
-    // play the entrance animation
-    void revealZone.offsetWidth;
+    void revealZone.offsetWidth; // reflow for animation
     revealZone.classList.add('fade-in-present');
 
-    isOpened = true; // mark opened for this session (not persisted)
+    isOpened = true; // session-only
   });
 
   // tap / keyboard to spin
