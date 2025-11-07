@@ -2,6 +2,7 @@
    イーサンのBlind Box — style.css (warm edition)
    ============================================== */
 
+   
 /* enforce hidden + global box sizing */
 [hidden]{ display:none !important; }
 *, *::before, *::after { box-sizing: border-box; }
