@@ -185,20 +185,39 @@ document.addEventListener('DOMContentLoaded', () => {
   cta.addEventListener('click', ()=>{
     popup.hidden = true;
 
-    // Discord ping: opened
+    // Discord ping: opened + memories summary
     if (WEBHOOK_URL){
-      const idForPing = (todayContainer?.dataset?.presentId) || chosen.id;
-      fetch(WEBHOOK_URL, {
+    const idForPing = (todayContainer?.dataset?.presentId) || chosen.id;
+
+    // build a summary of memories (IDs), including today's open
+    const seenMap = loadSeen();                           // { id: iso }
+    const ids = Object.keys(seenMap);
+    if (!ids.includes(String(idForPing))) ids.push(String(idForPing));
+
+    // nice numeric sort when possible
+    ids.sort((a,b) => {
+        const na = +a, nb = +b;
+        if (!Number.isNaN(na) && !Number.isNaN(nb)) return na - nb;
+        return String(a).localeCompare(String(b));
+    });
+
+    const memSummary = ids.join(', ');
+    const memCount = ids.length;
+    const isFirstTime = !seenMap[idForPing];             // was this present new to memories?
+
+    fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type":"application/json" },
         body: JSON.stringify({
-          content:
+        content:
             `🎁 **Blind Box opened!**\n` +
-            `• ID: \`${idForPing}\`\n` +
-            `• Time: \`${new Date().toLocaleString()}\``
+            `• ID: \`${idForPing}\`${isFirstTime ? ' (new in memories)' : ''}\n` +
+            `• Time: \`${new Date().toLocaleString()}\`\n` +
+            `• ${memCount} Memories Stored for now : \`${memSummary}\``
         })
-      }).catch(()=>{});
+    }).catch(()=>{});
     }
+
 
     const html = renderPresentHTML(chosen);
     if (todayContainer) todayContainer.innerHTML = html; else revealZone.innerHTML = html;
