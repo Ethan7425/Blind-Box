@@ -2,7 +2,7 @@
    イーサンのBlind Box — style.css (warm edition)
    ============================================== */
 
-   
+
 /* enforce hidden + global box sizing */
 [hidden]{ display:none !important; }
 *, *::before, *::after { box-sizing: border-box; }
@@ -173,7 +173,7 @@ nav a.active{ color:#2d2330; background:#fff; box-shadow:0 6px 16px rgba(255,124
 .bottom { transform: rotateX(-90deg) translateZ(calc(var(--box-size)/2)); }
 
 /* reveal zone */
-.reveal-zone{ display:grid; place-items:center; margin:18px 0 28px; }
+.reveal-zone{ display:grid; place-items:center; margin:48px 0 28px; }
 .tiny-hint{ margin-top:60px; color:#7f6a74; }
 
 /* popup (home) */

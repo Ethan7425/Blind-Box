@@ -8,9 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3" />
+
+  <script defer src="presents.js?v=3"></script>
+  <script defer src="script.js?v=3"></script>
 </head>
-<body>
+<body onload="authGuard()">
   <div class="bg-anim" aria-hidden="true"></div>
 
   <header class="site-header">
@@ -19,18 +22,19 @@
       <a href="home.html">Today</a>
       <span>·</span>
       <a href="memories.html" class="active">Memories</a>
+      <span class="right"><button id="logout" class="link">log out</button></span>
     </nav>
   </header>
 
   <main class="container">
     <h2 class="section-title">Our little library</h2>
-    <div class="grid" id="memories-grid"><!-- JS fills this --></div>
+    <div id="memories-grid" class="grid"></div>
+
+    <p class="muted" style="margin-top:10px">
+      <button id="resetSeen" class="link">reset local memories (this device)</button>
+    </p>
   </main>
 
-  <footer class="site-footer"><small>kept softly behind our tiny gate ♡</small></footer>
-
-  <script src="presents.js"></script>
-  <script src="script.js"></script>
-  <script>authGuard(); bindLogout();</script>
+  <!-- <script>bindLogout();</script> -->
 </body>
 </html>
