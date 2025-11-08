@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blind Box — Visualizer (admin)</title>
+
+  <!-- same font + css so it matches your site -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-anim" aria-hidden="true"></div>
+
+  <header class="site-header" style="padding-bottom:8px">
+    <h1 class="logo text-soft">Visualizer (admin)</h1>
+    <p class="muted" style="margin:6px 0 0">Click a number to preview how a present will look when revealed.</p>
+  </header>
+
+  <main class="container">
+    <!-- counts -->
+    <div class="card glass" style="margin-bottom:12px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap">
+      <div>
+        <strong>Total presents:</strong> <span id="countAll">0</span>
+        <span class="muted">|</span>
+        <strong>Hidden from memories:</strong> <span id="countHidden">0</span>
+        <span class="muted">|</span>
+        <strong>Archived:</strong> <span id="countArchived">0</span>
+      </div>
+      <div>
+        <label class="muted" style="margin-right:8px">Jump to ID:</label>
+        <input id="jumpId" class="input" placeholder="e.g. 12" style="width:120px">
+        <button id="jumpBtn" class="btn">Go</button>
+      </div>
+    </div>
+
+    <!-- number buttons -->
+    <section id="idGrid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(66px,1fr)); gap:10px; margin-bottom:14px"></section>
+
+    <!-- preview -->
+    <section class="reveal-zone" style="margin-top:8px">
+      <div id="previewCard" class="card glass neon-soft fade-in-present">
+        <p class="muted">Select a present on top to preview it here.</p>
+      </div>
+      <div id="meta" class="muted" style="margin-top:8px"></div>
+    </section>
+  </main>
+
+  <!-- data first -->
+  <script src="presents.js"></script>
+
+  <!-- inline logic just for this page -->
+  <script>
+    // run after everything is loaded so PRESENTS is definitely available
+    window.addEventListener('load', function () {
+      var grid = document.getElementById('idGrid');
+      var preview = document.getElementById('previewCard');
+      var meta = document.getElementById('meta');
+      var countAll = document.getElementById('countAll');
+      var countHidden = document.getElementById('countHidden');
+      var countArchived = document.getElementById('countArchived');
+      var jumpId = document.getElementById('jumpId');
+      var jumpBtn = document.getElementById('jumpBtn');
+
+      // safety: ensure PRESENTS exists
+        if (typeof PRESENTS === 'undefined' || !Array.isArray(PRESENTS)) {
+        preview.innerHTML = '<p class="muted">Error: PRESENTS is not loaded. Make sure <code>presents.js</code> is present and loads before this script.</p>';
+        return;
+        }
+
+
+      // helpers
+      var escMap = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
+      function esc(s){ return String(s||"").replace(/[&<>"']/g, function(m){ return escMap[m]; }); }
+      function renderPresentHTML(p){
+        var lines = String(p.message||"").split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+        var msg = lines.map(function(l){ return esc(l) + '<br>'; }).join('');
+        var img = (p.image && p.image.src)
+          ? '<figure class="polaroid">'
+              + '<img src="'+esc(p.image.src)+'" alt="'+esc(p.image.alt||"")+'" loading="lazy">'
+              + (p.image.caption ? '<figcaption>'+esc(p.image.caption)+'</figcaption>' : '')
+            + '</figure>'
+          : '';
+        return '<h2 class="section-title">'+esc(p.title||'')+'</h2><p>'+msg+'</p>'+img;
+      }
+
+      // clone + sort by numeric ID if possible
+      var list = PRESENTS.slice();
+      list.sort(function(a,b){
+        var na = +a.id, nb = +b.id;
+        if (!isNaN(na) && !isNaN(nb)) return na - nb;
+        return String(a.id).localeCompare(String(b.id));
+      });
+
+      // counts
+      countAll.textContent = list.length;
+      countHidden.textContent = list.filter(function(p){ return p.showInMemories === false; }).length;
+      countArchived.textContent = list.filter(function(p){ return !!p.archived; }).length;
+
+      // build buttons
+      var frag = document.createDocumentFragment();
+      list.forEach(function(p){
+        var btn = document.createElement('button');
+        btn.className = 'icon-btn';
+        btn.style.fontWeight = '900';
+        btn.setAttribute('data-id', p.id);
+        btn.title = (p.id + ' — ' + (p.title || ''));
+        btn.textContent = p.id;
+        if (p.archived) btn.style.outline = '2px dashed rgba(0,0,0,.1)';
+        if (p.showInMemories === false) btn.style.opacity = '.8';
+        btn.addEventListener('click', function(){ select(p.id); });
+        frag.appendChild(btn);
+      });
+      grid.appendChild(frag);
+
+      function select(id){
+        var target = list.find(function(x){ return String(x.id) === String(id); });
+        if (!target){
+          preview.innerHTML = '<p class="muted">not found.</p>';
+          meta.textContent = '';
+          return;
+        }
+        preview.classList.remove('fade-in-present'); void preview.offsetWidth; // restart anim
+        preview.innerHTML = renderPresentHTML(target);
+        preview.classList.add('fade-in-present');
+
+        var flags = [];
+        if (target.archived) flags.push('archived');
+        if (target.showInMemories === false) flags.push('hidden from memories');
+
+        meta.innerHTML =
+          '<strong>ID:</strong> ' + esc(target.id) +
+          ' <span class="muted">|</span> ' +
+          '<strong>Title:</strong> ' + esc(target.title || '') +
+          (flags.length ? ' <span class="muted">|</span> <strong>Flags:</strong> ' + esc(flags.join(', ')) : '');
+
+        // scroll preview into view on small screens
+        preview.scrollIntoView({ behavior:'smooth', block:'center' });
+      }
+
+      // jump by id
+      jumpBtn.addEventListener('click', function(){
+        var v = (jumpId.value || '').trim();
+        if (!v) return;
+        select(v);
+        // flash the matching button a bit (no CSS.escape needed as IDs are numeric strings)
+        var btns = grid.querySelectorAll('[data-id]');
+        for (var i=0; i<btns.length; i++){
+          if (String(btns[i].getAttribute('data-id')) === v){
+            btns[i].animate(
+              [{transform:'scale(1.0)'},{transform:'scale(1.06)'},{transform:'scale(1.0)'}],
+              {duration:300, easing:'ease-out'}
+            );
+            break;
+          }
+        }
+      });
+
+      // enter key to jump
+      jumpId.addEventListener('keydown', function(e){
+        if (e.key === 'Enter'){ e.preventDefault(); jumpBtn.click(); }
+      });
+    });
+  </script>
+</body>
+</html>

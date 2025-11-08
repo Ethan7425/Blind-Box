@@ -56,7 +56,7 @@ the only goal is to make you smile and brighten your day a little. you matter fo
     title: "Dream corners ☁️",
     message: `If you could design a tiny secret room that exists only for you, what would it look like?  
     music, light, scent — describe it to me sometime.`,
-    image: { src: "assets/other/dreamroom.png", alt: "a cozy glowing room", caption: "your own secret corner" },
+    // image: { src: "assets/other/dreamroom.png", alt: "a cozy glowing room", caption: "your own secret corner" },
     date: "2025-11-07",
   },
 

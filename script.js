@@ -1,12 +1,12 @@
 /* =========================
    Blind Box — script.js
-   Unseen-only → Memories on open
+   Unseen-only → Memories on open + Like/Reply modal
    ========================= */
 
 /* --------- CONFIG --------- */
-const PASSWORD   = "チェン";
-const STORAGE_KEY= "met2_auth";
-const SEEN_KEY   = "presentSeen"; // { [id]: ISO timestamp }
+const PASSWORD    = "チェン";
+const STORAGE_KEY = "met2_auth";
+const SEEN_KEY    = "presentSeen"; // { [id]: ISO timestamp }
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1435995830069760110/XqPp37xJIgXpZptmXyaj_Smye0CWNP7p8QaCfEHuBAio_vmEMKlYN53pOpl0VwF7fD8B";
 /* -------------------------- */
 
@@ -14,35 +14,35 @@ const WEBHOOK_URL = "https://discord.com/api/webhooks/1435995830069760110/XqPp37
 document.documentElement.style.fontFamily = "'Pacifico', cursive";
 
 /* utils */
-const escapeHTML = s => (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const esc = s => (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const loadSeen = () => { try { return JSON.parse(localStorage.getItem(SEEN_KEY) || "{}"); } catch { return {}; } };
 const saveSeen = (obj) => { try { localStorage.setItem(SEEN_KEY, JSON.stringify(obj)); } catch {} };
 
 /* render helpers */
 function renderPresentHTML(p){
   const lines = (p.message||"").split('\n').map(l=>l.trim()).filter(Boolean);
-  const msg = lines.map(l=>`${escapeHTML(l)}<br>`).join('');
+  const msg = lines.map(l=>`${esc(l)}<br>`).join('');
   const img = p.image?.src ? `
     <figure class="polaroid">
-      <img src="${escapeHTML(p.image.src)}" alt="${escapeHTML(p.image.alt||'')}" loading="lazy">
-      ${p.image?.caption ? `<figcaption>${escapeHTML(p.image.caption)}</figcaption>` : ``}
+      <img src="${esc(p.image.src)}" alt="${esc(p.image.alt||'')}" loading="lazy">
+      ${p.image?.caption ? `<figcaption>${esc(p.image.caption)}</figcaption>` : ``}
     </figure>` : ``;
-  return `<h2 class="section-title">${escapeHTML(p.title||'')}</h2><p>${msg}</p>${img}`;
+  return `<h2 class="section-title">${esc(p.title||'')}</h2><p>${msg}</p>${img}`;
 }
 function renderMemoryCardHTML(p, ts){
   const img = p.image?.src ? `
     <figure class="polaroid">
-      <img src="${escapeHTML(p.image.src)}" alt="${escapeHTML(p.image.alt||'')}" loading="lazy">
-      ${p.image?.caption ? `<figcaption>${escapeHTML(p.image.caption)}</figcaption>` : ``}
+      <img src="${esc(p.image.src)}" alt="${esc(p.image.alt||'')}" loading="lazy">
+      ${p.image?.caption ? `<figcaption>${esc(p.image.caption)}</figcaption>` : ``}
     </figure>` : ``;
   const when = ts ? new Date(ts).toLocaleString() : "";
   const first = (p.message||"").split('\n').map(l=>l.trim()).find(Boolean)||"";
   return `
-    <article class="memory card glass neon-soft fade-in" data-id="${escapeHTML(p.id)}">
-      <h3>${escapeHTML(p.title||p.id)}</h3>
+    <article class="memory card glass neon-soft fade-in" data-id="${esc(p.id)}">
+      <h3>${esc(p.title||p.id)}</h3>
       ${img}
-      ${first ? `<p class="muted">${escapeHTML(first)}</p>` : ``}
-      ${when ? `<p class="muted">opened: ${escapeHTML(when)}</p>` : ``}
+      ${first ? `<p class="muted">${esc(first)}</p>` : ``}
+      ${when ? `<p class="muted">opened: ${esc(when)}</p>` : ``}
     </article>`;
 }
 
@@ -83,19 +83,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('present-popup');
   const cta   = document.getElementById('ctaPresent');
   const hint  = document.getElementById('tiny');
-  const revealZone    = document.getElementById('today-reveal');
-  const todayContainer= document.getElementById('today-content');
-  const memGrid       = document.getElementById('memories-grid');
-  const resetSeenBtn  = document.getElementById('resetSeen');
+  const revealZone     = document.getElementById('today-reveal');
+  const todayContainer = document.getElementById('today-content');
+  const memGrid        = document.getElementById('memories-grid');
+  const resetSeenBtn   = document.getElementById('resetSeen');
+
+  const likeWrap   = document.getElementById('feedback-trigger');
+  const likeBtn    = document.getElementById('likeBtn');
+  const fbBackdrop = document.getElementById('feedback-backdrop');
+  const fbMessage  = document.getElementById('feedbackMessage');
+  const fbSend     = document.getElementById('sendHeart');
+  const fbCancel   = document.getElementById('cancelFeedback');
+  const fbStatus   = document.getElementById('feedbackStatus');
 
   /* Memories page: render seen */
   if (memGrid){
     const seen = loadSeen(); // { id: iso }
-    const entries = Object.entries(seen); // [[id, ts], ...]
+    const entries = Object.entries(seen);
     if (!entries.length){
       memGrid.innerHTML = `<p class="muted">no memories yet — soon ✨</p>`;
     } else {
-      // newest first
       entries.sort((a,b)=> new Date(b[1]) - new Date(a[1]));
       const cards = entries.map(([id,ts])=>{
         const p = (PRESENTS||[]).find(x=>x.id===id);
@@ -119,10 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let chosen = null;
 
   if (unseenPool.length){
-    // simple fair random among unseen
     chosen = unseenPool[Math.floor(Math.random() * unseenPool.length)];
   } else {
-    // all seen: show a friendly message card instead of spin flow
     const allCaughtUp = `
       <article class="card glass neon-soft fade-in-present">
         <h2 class="section-title">all caught up ✨</h2>
@@ -135,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // keep chosen id on container (for Discord ping)
   if (todayContainer) todayContainer.dataset.presentId = chosen.id;
 
   // start hidden
@@ -177,11 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
   box.addEventListener('click', trigger);
   box.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); trigger(); }});
 
-  // CTA → ping → reveal → mark seen
+  // CTA → ping → reveal → mark seen → show like button
   cta.addEventListener('click', ()=>{
     popup.hidden = true;
 
-    // Discord ping with id
+    // Discord ping: opened
     if (WEBHOOK_URL){
       const idForPing = (todayContainer?.dataset?.presentId) || chosen.id;
       fetch(WEBHOOK_URL, {
@@ -204,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     revealZone.classList.remove('fade-in-present'); void revealZone.offsetWidth;
     revealZone.classList.add('fade-in-present');
 
-    // Save to memories: mark as seen (first time)
+    // Save to memories (seen once)
     const now = new Date().toISOString();
     const seenMap = loadSeen();
     if (!seenMap[chosen.id]) {
@@ -212,5 +216,59 @@ document.addEventListener('DOMContentLoaded', () => {
       saveSeen(seenMap);
     }
     isOpened = true;
+
+    // show like/reply trigger
+    if (likeWrap) likeWrap.hidden = false;
   });
+
+  /* ---------- Like / Reply modal logic ---------- */
+  function openFeedback(){
+    if (!fbBackdrop) return;
+    fbBackdrop.hidden = false;
+    fbStatus.textContent = "";
+    fbMessage.value = "";
+    fbMessage.focus();
+  }
+  function closeFeedback(){
+    if (!fbBackdrop) return;
+    fbBackdrop.hidden = true;
+  }
+
+  if (likeBtn)    likeBtn.addEventListener('click', openFeedback);
+  if (fbCancel)   fbCancel.addEventListener('click', closeFeedback);
+  if (fbBackdrop) fbBackdrop.addEventListener('click', (e)=>{ if(e.target===fbBackdrop) closeFeedback(); });
+
+  if (fbSend){
+    fbSend.addEventListener('click', ()=>{
+      const idForPing = (todayContainer?.dataset?.presentId) || chosen.id;
+      const raw = (fbMessage.value || "").trim();
+      const safe = raw.replace(/`/g,"ʼ"); // soften backticks for discord formatting
+      const hasMsg = safe.length > 0;
+
+      if (!WEBHOOK_URL){
+        fbStatus.textContent = "No webhook configured.";
+        return;
+      }
+
+      const content =
+        (hasMsg
+          ? `💖 **She liked your present and replied!**\n• ID: \`${idForPing}\`\n• Message:\n> ${safe}\n• Time: \`${new Date().toLocaleString()}\``
+          : `💖 **She liked your present.**\n• ID: \`${idForPing}\`\n• Time: \`${new Date().toLocaleString()}\``);
+
+      fbSend.disabled = true;
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ content })
+      })
+      .then(()=>{
+        fbStatus.textContent = "Sent. Thank you 🫶";
+        setTimeout(closeFeedback, 600);
+      })
+      .catch(()=>{
+        fbStatus.textContent = "Couldn’t send. Try again?";
+      })
+      .finally(()=>{ fbSend.disabled = false; });
+    });
+  }
 });

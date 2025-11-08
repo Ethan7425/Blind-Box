@@ -57,6 +57,13 @@
       <div id="today-content" class="card glass neon-soft" data-present-id="">
         <!-- JS fills this with CURRENT present -->
       </div>
+
+      <!-- ✅ ADDED: like / tiny reply trigger (appears after reveal) -->
+      <div id="feedback-trigger" class="like-wrap" hidden>
+        <button id="likeBtn" class="icon-btn heart-btn" aria-haspopup="dialog" aria-controls="feedback-backdrop" aria-label="Send a heart or tiny note">❤</button>
+        <span class="muted tiny-inline">send a heart or a tiny note</span>
+      </div>
+      <!-- /ADDED -->
     </section>
   </main>
 
@@ -68,6 +75,21 @@
       <button id="ctaPresent" class="btn cta-glow">open the present</button>
     </div>
   </div>
+
+  <!-- ✅ ADDED: feedback modal (heart / tiny reply) -->
+  <div id="feedback-backdrop" class="popup-backdrop" hidden>
+    <div class="popup-card glass neon-soft popup-in feedback-card" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+      <h3 id="fbTitle" class="popup-title">send a little reply? 💌</h3>
+      <p class="popup-text">you can just send a heart, or add a tiny note.</p>
+      <textarea id="feedbackMessage" class="input textarea" maxlength="240" placeholder="(optional) write a tiny note…"></textarea>
+      <div class="row">
+        <button id="sendHeart" class="btn cta-glow">Send ❤️</button>
+        <button id="cancelFeedback" class="btn">Cancel</button>
+      </div>
+      <p class="muted small" id="feedbackStatus" aria-live="polite"></p>
+    </div>
+  </div>
+  <!-- /ADDED -->
 
   <!-- order matters: load data first, then logic -->
   <script src="presents.js"></script>
