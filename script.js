@@ -20,15 +20,33 @@ const saveSeen = (obj) => { try { localStorage.setItem(SEEN_KEY, JSON.stringify(
 
 /* render helpers */
 function renderPresentHTML(p){
-  const lines = (p.message||"").split('\n').map(l=>l.trim()).filter(Boolean);
-  const msg = lines.map(l=>`${esc(l)}<br>`).join('');
+  // allow <br> in messages
+  const msg = (p.message || "").replace(/\n/g, "<br>");
+
+  // Optional image
   const img = p.image?.src ? `
     <figure class="polaroid">
-      <img src="${esc(p.image.src)}" alt="${esc(p.image.alt||'')}" loading="lazy">
+      <img src="${esc(p.image.src)}" alt="${esc(p.image.alt || '')}" loading="lazy">
       ${p.image?.caption ? `<figcaption>${esc(p.image.caption)}</figcaption>` : ``}
     </figure>` : ``;
-  return `<h2 class="section-title">${esc(p.title||'')}</h2><p>${msg}</p>${img}`;
+
+  // Optional link (shows as a clear "click here" text)
+  const link = p.link ? `
+    <p class="present-link">
+      <a href="${esc(p.link)}" target="_blank" rel="noopener">
+        ${p.linkText ? esc(p.linkText) : "click here 🎁"}
+      </a>
+    </p>` : ``;
+
+  return `
+    <h2 class="section-title">${esc(p.title || '')}</h2>
+    <p>${msg}</p>
+    ${img}
+    ${link}
+  `;
 }
+
+
 function renderMemoryCardHTML(p, ts){
   const img = p.image?.src ? `
     <figure class="polaroid">
@@ -76,6 +94,7 @@ function bindLogout(){
 }
 window.authGuard = authGuard;
 window.bindLogout = bindLogout;
+
 
 /* main */
 document.addEventListener('DOMContentLoaded', () => {

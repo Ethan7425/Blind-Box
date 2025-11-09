@@ -249,3 +249,65 @@ nav a.active{ color:#2d2330; background:#fff; box-shadow:0 6px 16px rgba(255,124
 .small{ font-size:.9rem; }
 .tiny-inline{ font-size:.95rem; }
 .feedback-card{ max-width: 520px; }
+
+a {
+  color: var(--neon);
+  text-decoration: none;
+  font-weight: 600;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.scene-wrap { position: relative; z-index: 1; }
+.reveal-zone { position: relative; z-index: 5; }
+
+.reveal-zone a {
+  color: var(--neon);
+  font-weight: 600;
+  text-decoration: none;
+}
+.reveal-zone a:hover { text-decoration: underline; color: var(--neon-soft); }
+
+/* link styling under a present */
+.present-link { margin-top: 6px; text-align: left; }
+.btn-link{
+  display:inline-block; padding:8px 12px; border-radius:12px;
+  text-decoration:none; font-weight:700;
+  color:#2a1618; background: linear-gradient(90deg, var(--neon-soft), var(--p3));
+  box-shadow: 0 0 0 1px #ffffffaa, 0 8px 18px rgba(255,124,163,.22);
+  transition: transform .12s ease, box-shadow .2s ease;
+}
+.btn-link:hover{ transform: translateY(-1px); box-shadow: 0 0 0 1px #fff, 0 10px 22px rgba(255,124,163,.28); }
+
+.reveal-zone a {
+  color: var(--neon);
+  text-decoration: none;
+  font-weight: 600;
+}
+.reveal-zone a:hover {
+  text-decoration: underline;
+  color: var(--neon-soft);
+}
+
+.present-link {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.present-link a {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--neon);
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 0 8px rgba(255,78,199,0.2);
+  transition: 0.2s;
+}
+
+.present-link a:hover {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 12px rgba(255,78,199,0.4);
+}

@@ -142,14 +142,155 @@ the only goal is to make you smile and brighten your day a little. you matter fo
     image: { src: "assets/other/quote10.png", alt: "soft pastel quote", caption: "a gentle start" },
   },
 
-  // {
-  //   id: "17",
-  //   title: "tiny thought ☔",
-  //   message: `you’re allowed to slow down — the world will wait for you to catch your breath.`,
-  //   image: { src: "assets/other/quote11.png", alt: "soft pastel quote", caption: "the world can wait" },
-  // },
 
+  // Instagram Ones 
 
+  {
+    id: "17",
+    title: "tiny thought 🌸",
+    message: `Or anything you basically crave at anytime.`,
+    image: { src: "assets/other/quote11.jpeg", alt: "soft pastel quote", caption: "a night craving" },
+  },
 
+  {
+    id: "18",
+    title: "tiny thought 🌸",
+    message: `Every picture of you I freeze out of beauty.`,
+    image: { src: "assets/other/quote12.jpeg", alt: "soft pastel quote", caption: "A Pretty girl" },
+  },
+
+  {
+    id: "19",
+    title: "tiny thought 🌸",
+    message: `You're making basically all my days.`,
+    image: { src: "assets/other/quote13.jpeg", alt: "soft pastel quote", caption: "You" },
+  },
+
+  {
+    id: "20",
+    title: "Peace Harmony",
+    message: `It felt peaceful`,
+    link: "https://www.instagram.com/reel/DOq8xyvjFup/?igsh=MWEzNzJwdXZ1b3VkcQ==",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "21",
+    title: "The perfect Combo",
+    message: `Just like your ideas and my magic`,
+    link: "https://www.instagram.com/reel/DK5Hqx3TIYF/?igsh=OWc5dGswZHFmbHE5",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "22",
+    title: "Lost",
+    message: `Let's do it ?`,
+    link: "https://www.instagram.com/reel/DO3Jqg5DFjU/?igsh=aHp5MzB5MWF2N3Iz",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "23",
+    title: "Colors",
+    message: `I'd love doing it with you`,
+    link: "https://www.instagram.com/reel/DPZKyQsjF5i/?igsh=MWd6MDE4ODF3czluOQ==",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "24",
+    title: "Dates",
+    message: `If you had to choose one ?`,
+    link: "https://www.instagram.com/reel/DPqZ7fxgmBM/?igsh=bjNuMHN6MmZ6aHJn",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "25",
+    title: "Arcade",
+    message: `Shouldn't be a problem to find in Tokyo`,
+    link: "https://www.instagram.com/reel/DN3X-89UF2y/?igsh=Z29oMTdyd2N2cnRp",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "26",
+    title: "Tiny Bricks",
+    message: `Do you like Lego ?`,
+    link: "https://www.instagram.com/reel/DOq8xyvjFup/?igsh=MWEzNzJwdXZ1b3VkcQ==",
+    linkText: "see the little video 🎶"
+  },
+
+  {
+    id: "27",
+    title: "This",
+    message: `This and you ...`,
+    link: "https://www.instagram.com/p/DQZDL8nj6QI/?igsh=Y3p3OHlhMXc4NzJs",
+    linkText: "see the little video 🎶"
+  },
+
+  // Question Ones 
+
+  {
+    id: "28",
+    title: "pause in time ⏳",
+    message: `If you could freeze one small moment forever — just to breathe in it again — what would it be?`,
+  },
+
+  {
+    id: "29",
+    title: "tiny comforts ☕",
+    message: `What are the little things that always calm you down — sounds, smells, textures, habits?`,
+  },
+
+  {
+    id: "30",
+    title: "dream corners 🌙",
+    message: `If you had a secret room that existed only for you, what would it look like?`,
+  },
+
+  {
+    id: "31",
+    title: "soft bravery 🌸",
+    message: `What’s something quiet you did recently that you’re proud of, even if no one saw?`,
+  },
+
+  {
+    id: "32",
+    title: "echoes of songs 🎵",
+    message: `Is there a song that still feels like a memory — not for its lyrics, but for how it made you feel?`,
+  },
+
+  {
+    id: "33",
+    title: "gentle beginnings 🌼",
+    message: `If you could start something new tomorrow, just for you, what would it be?`,
+  },
+
+  {
+    id: "34",
+    title: "slow mornings ☁️",
+    message: `What’s your ideal slow morning — the one where time doesn’t matter?`,
+  },
+
+  {
+    id: "35",
+    title: "small joys ✨",
+    message: `What are the tiny things lately that made you smile, even for just a second?`,
+  },
+
+  {
+    id: "36",
+    title: "kind mirror 💫",
+    message: `If you looked at yourself through the eyes of someone who loves you, what’s the first thing you’d notice?`,
+  },
+
+  {
+    id: "37",
+    title: "midnight thoughts 🌙",
+    message: `When it’s late and quiet, where does your mind wander most often?`,
+  },
+  
 ];
 
